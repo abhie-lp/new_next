@@ -1,2 +1,2 @@
 #!/bin/bash
-newnext.py $*
+$(dirname "$0")/newnext.py $*

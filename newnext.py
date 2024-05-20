@@ -17,8 +17,14 @@ parser.add_argument("name", help="Name of the file/folder to create.")
 args = parser.parse_args()
 files = glob(f"{args.name}[\\.-_]*", )
 if not files:
-    open(args.name + DEFAULT_SEQUENCE + ".txt", "a").close()
-    sys.exit(0)
+    try:
+        filename = args.name + DEFAULT_SEQUENCE + ".txt"
+        open(filename, "a").close()
+        print(filename)
+        sys.exit(0)
+    except Exception as e:
+        print(e)
+
 latest_file = max(files, key=os.path.getctime)
 escaped_basename = re.escape(args.name)
 sequence = re.search(rf"{escaped_basename}([-._]?)(\d+).*", latest_file)
@@ -27,6 +33,10 @@ if sequence:
     new_file = (args.name + separator +
                 str(int(sequence) + 1).zfill(len(sequence)))
 else:
-    new_file = args.name + DEFAULT_SEQUENCE
+    new_file = args.name + "_002"
 new_file = new_file + "." + latest_file.rsplit(".", 1)[1]
-open(new_file, "w").close()
+try:
+    open(new_file, "w").close()
+    print(new_file)
+except Exception as e:
+    print(e)
